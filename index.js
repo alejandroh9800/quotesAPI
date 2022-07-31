@@ -145,7 +145,7 @@ process.on("uncaughtException", (error) => {
 });
 
 const quotes = [];
-const ran = 0;
+let newQuote = "";
 
 app.get("/", (req, res) => {
   res.json("Welcome to my API");
@@ -170,6 +170,31 @@ app.get("/quotes", (req, res) => {
     })
     .catch((err) => console.log(err));
 });
+
+/*
+app.get("/quotes", (req, res) => {
+  axios
+    .get("https://www.brainyquote.com/topics/motivational-quotes")
+    .then((response) => {
+      const html = response.data;
+      const $ = cheerio.load(html);
+
+      $("a:contains(.)", html).each(function () {
+        const quote = $(this).text();
+        const author = $(this).attr("href");
+        if (quote.includes("\n")) {
+          quotes.push({ quote, author });
+        }
+      });
+
+      data = res.json(quotes);
+      //data = res.json(quotes);
+
+      console.log(quotes);
+    })
+    .catch((err) => console.log(err));
+});
+*/
 
 app.get("/quotes/random", (req, res) => {
   axios
