@@ -145,6 +145,7 @@ process.on("uncaughtException", (error) => {
 });
 
 const quotes = [];
+const ran = 0;
 
 app.get("/", (req, res) => {
   res.json("Welcome to my API");
@@ -166,6 +167,30 @@ app.get("/quotes", (req, res) => {
         }
       });
       res.json(quotes);
+    })
+    .catch((err) => console.log(err));
+});
+
+app.get("/quotes/random", (req, res) => {
+  axios
+    .get("https://blog.hubspot.com/sales/famous-quotes")
+    .then((response) => {
+      const html = response.data;
+      const $ = cheerio.load(html);
+
+      $('li:contains(".")', html).each(function () {
+        const quote = $(this).text();
+        if (!quote.includes("\n")) {
+          quotes.push({
+            quote,
+          });
+        }
+      });
+      let random = Math.floor(Math.random() * quotes.length);
+
+      setTimeout(() => {
+        res.json(quotes[random]);
+      }, 500);
     })
     .catch((err) => console.log(err));
 });
